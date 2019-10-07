@@ -33,7 +33,7 @@ public class ParserXML extends DefaultHandler {
     
     	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-
+                //This function is called whenever starting tag is encountered. It checks what value it will contain and sets corrensponding flag
                 if (qName.equalsIgnoreCase("person")) {
 			tmpCustomers = new ModelCustomers();
                         tmpContactsList = new ArrayList<ModelContacts>();
@@ -68,6 +68,7 @@ public class ParserXML extends DefaultHandler {
 			bJabber = true;
 		}else{
                 if (!qName.equalsIgnoreCase("contacts") && !qName.equalsIgnoreCase("persons") ) {
+                    //this is for other, unknown methods of contact
                         tmpContact = new ModelContacts();
 			bOther = true;
 		}
@@ -78,7 +79,8 @@ public class ParserXML extends DefaultHandler {
         
     @Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
-		
+		//this one is called whenever closing tag is encountered, im using it to check if closing tag for contacts is present, 
+                //and if its true - save data to database as its ending tag for one person
             if(qName.equalsIgnoreCase("contacts")){
                 
             try{
@@ -94,6 +96,7 @@ public class ParserXML extends DefaultHandler {
     
     
     public void characters(char ch[], int start, int length) throws SAXException {
+                //this one reads contents that are present between opening and closing tag
                     String a = new String(ch, start, length);
 		if (bName) {
                         tmpCustomers.setName(a);
