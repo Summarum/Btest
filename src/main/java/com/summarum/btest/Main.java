@@ -9,6 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -16,37 +19,61 @@ import org.xml.sax.SAXException;
 
 
 public class Main {
-       
-    public static void main(String[] args) {
-     /*   DBConnect connect = new DBConnect();
-        ModelCustomers modeltest = new ModelCustomers();
-        modeltest.setName("Waclaw");
-        modeltest.setSurname("Januszowski");
-        modeltest.setAge(20);
-        modeltest.setCity("Lublin");
-        connect.connectToDB(modeltest);
-        */
-     
-     //ParserCSV parCsv = new ParserCSV();
-    // parCsv.readCsvFile();
-     
-    // ParsXML parser = new ParsXML();
-    // parser.parssXML();
-     
-     SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+       private static Scanner input;
+       private static String tmpFileName;
+       public static void chooseXML(){
+           
+       SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
     try {
         SAXParser saxParser = saxParserFactory.newSAXParser();
         ParserXML handler = new ParserXML();
-        saxParser.parse(new File("dane-osoby.xml"), handler);
-        //Get Employees list
-       // List<ModelCustomers> empList = handler.getTmpCustomerList();
-        //print employee information
-       // for(ModelCustomers emp : empList)
-         //   System.out.println(emp);
+        System.out.println("Enter file name/path to file: ");
+        tmpFileName = input.next();
+        
+        saxParser.parse(new File(tmpFileName), handler);
+        System.out.println("Success");
     } catch (ParserConfigurationException | SAXException | IOException e) {
         e.printStackTrace();
     }
-      
+       
+       
+       }
+       public static void chooseCSV(){
+       ParserCSV parCsv = new ParserCSV();
+       System.out.println("Enter file name/path to file: ");
+       tmpFileName = input.next();
+           try {
+               parCsv.readCsvFile(tmpFileName);
+           } catch (Exception ex) {
+               System.out.println(ex);
+           }
+       System.out.println("Success");
+       
+       }
+       
+       
+    public static void main(String[] args) {
+        input = new Scanner(System.in);
+        int in;
+        while(true){
+        System.out.println("Hello, what type of file would you like to process?");
+        System.out.println("1. CSV");
+        System.out.println("2. XML");
+        System.out.println("3. Exit");
+        in = input.nextInt();
+        if(in == 1){
+        chooseCSV();
+        }
+        if(in == 2){
+        chooseXML();
+        
+        }
+        if(in == 3){
+        break;
+        }
+
+        }
+
 }
 
 }

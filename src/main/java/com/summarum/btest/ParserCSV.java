@@ -8,6 +8,7 @@ package com.summarum.btest;
 import com.mysql.cj.util.StringUtils;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 public class ParserCSV {
     public ModelCustomers populateCustomers(String[] data){
         ModelCustomers customer = new ModelCustomers();
+        if(data.length > 1){
         customer.setName(data[0]);
         customer.setSurname(data[1]);
         if(data[2].isEmpty()){
@@ -23,8 +25,10 @@ public class ParserCSV {
         customer.setAge(Integer.parseInt(data[2]));
         }
         customer.setCity(data[3]);
-    
-    return customer;
+        
+        return customer;
+        }
+        return null;
     }
     
     public ArrayList<ModelContacts> populateContacts(String[] data){
@@ -61,25 +65,27 @@ public class ParserCSV {
         
         return userContacts;
     }
-    public void readCsvFile(){
+    public void readCsvFile(String fileName) throws Exception{
         ModelCustomers cust;
         ArrayList<ModelContacts> contactsList;
         DBConnect dbconnect = new DBConnect();
-    File file = new File("dane-osoby.csv");
+    File file = new File(fileName);
     String[] tempDataTable;
     try (BufferedReader br = new BufferedReader(new FileReader(file))) {
         
         String line;
         while ((line = br.readLine()) != null) {
             
-            tempDataTable = line.split(",");
-            System.out.println(line);
+           tempDataTable = line.split(",");
            cust = populateCustomers(tempDataTable);
            contactsList = populateContacts(tempDataTable);
+           if(cust!= null){
            dbconnect.saveData(cust, contactsList);
+           }
         }
-    }catch(Exception e){
-
+    }catch(FileNotFoundException e){
+        
+       System.out.println(e.toString());
 
     }
     

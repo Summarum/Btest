@@ -51,6 +51,7 @@ public class DBConnect {
         
     }catch(ClassNotFoundException | SQLException e){
     System.out.println(e);
+    System.out.println("Operation failed");
     
     }
     

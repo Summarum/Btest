@@ -12,16 +12,12 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class ParserXML extends DefaultHandler { 
     
-        private List<ModelCustomers> tmpCustomersList = null;
 	private ModelCustomers tmpCustomers = null;
         private ArrayList<ModelContacts> tmpContactsList = null;
         private ModelContacts tmpContact = null;
-	private StringBuilder data = null;
         private DBConnect dbconnect = new DBConnect();
         
-    public List<ModelCustomers> getTmpCustomerList() {
-		return tmpCustomersList;
-	}
+   
     
 	boolean bName = false;
 	boolean bSurname = false;
@@ -38,10 +34,6 @@ public class ParserXML extends DefaultHandler {
     	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 
-            
-           // System.out.println("Znalezione element: " + qName);
-            
-            System.out.println("Start Element :" + qName);
                 if (qName.equalsIgnoreCase("person")) {
 			tmpCustomers = new ModelCustomers();
                         tmpContactsList = new ArrayList<ModelContacts>();
@@ -95,7 +87,7 @@ public class ParserXML extends DefaultHandler {
             
             }
             }
-            //System.out.println("End Element :" + qName);
+
             
             
 	}
@@ -105,32 +97,27 @@ public class ParserXML extends DefaultHandler {
                     String a = new String(ch, start, length);
 		if (bName) {
                         tmpCustomers.setName(a);
-			System.out.println("Name : " + tmpCustomers.getName());
 			bName = false;
 		}
 
 		if (bSurname) {
                        tmpCustomers.setSurname(a);
-			System.out.println("Surname : " +  tmpCustomers.getSurname());
 			bSurname = false;
 		}
 
 		if (bAge) {
                        tmpCustomers.setAge(Integer.parseInt(a));
-                       System.out.println("Age : " +  tmpCustomers.getAge());
 			bAge = false;
 		}
 
 		if (bCity) {
                        tmpCustomers.setCity(a);
-			System.out.println("City : " + tmpCustomers.getCity());
 			bCity = false;
 		}
                 if (bEmail) {
                        tmpContact.setType(1);
                        tmpContact.setContact(a);
                        tmpContactsList.add(tmpContact);
-			System.out.println("Contact : "+tmpContact.getContact());
 			bEmail = false;
 		}
                 if (bPhone) {
@@ -138,21 +125,18 @@ public class ParserXML extends DefaultHandler {
                        a=a.replace(" ", "");
                        tmpContact.setContact(a);
                        tmpContactsList.add(tmpContact);
-			System.out.println("Contact : " +  tmpContact.getContact());
 			bPhone = false;
 		}
                 if (bJabber) {
                        tmpContact.setType(3);
                        tmpContact.setContact(a);
                        tmpContactsList.add(tmpContact);
-			System.out.println("Jabber : " + tmpContact.getContact());
-			bJabber = false;
+                        bJabber = false;
 		}
                 if (bOther) {
                        tmpContact.setType(0);
                        tmpContact.setContact(a);
                        tmpContactsList.add(tmpContact);
-			System.out.println("OTHER : " + tmpContact.getContact());
 			bOther = false;
 		}
 
